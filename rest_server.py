@@ -1,4 +1,4 @@
-from langchain_community.chat_models.ollama import ChatOllama
+from langchain_groq import ChatGroq
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -6,7 +6,7 @@ from fastapi.responses import StreamingResponse
 
 from pydantic import BaseModel
 
-llm = ChatOllama(model="phi3")
+llm = ChatGroq(temperature=0, model="llama3-8b-8192")
 
 origins = ["*"]
 
@@ -35,9 +35,7 @@ class Data(BaseModel):
 
 
 def create_generator(query):
-    print(query)
     for event in llm.stream(query):
-        print(event.content)
         yield "data: " + event.content + "\n\n"
 
 
